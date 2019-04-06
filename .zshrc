@@ -1,11 +1,11 @@
-# Lines configured by zsh-newuser-install
+## zsh-newuser-install
 HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
 unsetopt beep
 bindkey -e
-# End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
+
+## compinstall
 zstyle :compinstall filename '/home/yi/.zshrc'
 zstyle ':completion:*' menu select
 
@@ -13,32 +13,53 @@ export TERM="xterm-256color"
 
 autoload -Uz compinit
 compinit
-# End of lines added by compinstall
 
+## Aliases
 alias ls='ls --color=auto'
 alias vim='nvim'
 alias vi='nvim'
 alias v='nvim'
 
-c() {
-    echo "\n===Complie Started==="
-    g++ -std=c++11 -O2 -fsanitize=undefined -Wall -Wextra -Wshadow -o "${1%.*}.o" "$1"
-    echo "===Compile Finished===\n"
-    echo "=====Run====="
-    ./${1%.*}.o
+## C++ complie functions
+c() { # Compile
+    if [[ -n "$1" ]]
+    then 
+        cf="${1%.*}"
+    fi
+    echo "\n===Compiling [$cf.cpp]==="
+    g++ -std=c++11 -O2 -fsanitize=undefined -Wall -Wextra -Wshadow -o "$cf.o" "$cf.cpp"
+    echo "===Compile Finished==="
 }
 
-x() {
-    echo "\n=====Run====="
-    ./${1%.*}.o
+x() { # Run
+    if [[ -n "$1" ]]
+    then 
+        cf="${1%.*}"
+    fi
+    if [ -f "$cf.i" ]
+    then
+        echo "\n===Running [$cf.o] < [$cf.i]==="
+        ./$cf.o < $cf.i
+    else
+         echo "\n===Running [$cf.o]==="
+        ./$cf.o
+    fi
 }
 
+cx() { # Compile & Run
+    c $1
+    x $1
+}
 
+## Powerlevel9k
 source /usr/share/zsh-theme-powerlevel9k/powerlevel9k.zsh-theme
-POWERLEVEL9K_MODE='nerdfont-complete'
+#POWERLEVEL9K_MODE='nerdfont-complete'
+POWERLEVEL9K_MODE='awesome-fontconfig'
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(dir_writable status battery time)
-POWERLEVEL9K_BATTERY_ICON=""
+#POWERLEVEL9K_BATTERY_ICON=""
 
+
+## zgen
 source "${HOME}/.zgen/zgen.zsh"
 
 if ! zgen saved; then
@@ -56,7 +77,6 @@ if ! zgen saved; then
     # bulk load
     zgen loadall <<EOPLUGINS
         zsh-users/zsh-history-substring-search
-        /path/to/local/plugin
 EOPLUGINS
     # ^ can't indent this EOPLUGINS
 
