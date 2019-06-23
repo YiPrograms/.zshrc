@@ -8,17 +8,19 @@ bindkey -e
 ## compinstall
 zstyle :compinstall filename '/home/yi/.zshrc'
 zstyle ':completion:*' menu select
+zstyle :omz:plugins:ssh-agent agent-forwarding on
 
 export TERM="xterm-256color"
 
-autoload -Uz compinit
-compinit
 
 ## Aliases
 alias ls='ls --color=auto'
 alias vim='nvim'
 alias vi='nvim'
 alias v='nvim'
+alias nv='optirun'
+alias es='intel-virtual-output -f'
+
 
 ## C++ complie functions
 c() { # Compile
@@ -55,8 +57,21 @@ cx() { # Compile & Run
 source /usr/share/zsh-theme-powerlevel9k/powerlevel9k.zsh-theme
 #POWERLEVEL9K_MODE='nerdfont-complete'
 POWERLEVEL9K_MODE='awesome-fontconfig'
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(dir_writable status battery time)
-#POWERLEVEL9K_BATTERY_ICON=""
+POWERLEVEL9K_BATTERY_ICON=""
+POWERLEVEL9K_TIME_BACKGROUND='blue'
+POWERLEVEL9K_DIR_HOME_BACKGROUND='orangered1'
+POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND='orangered1'
+POWERLEVEL9K_DIR_ETC_BACKGROUND='orangered1'
+POWERLEVEL9K_DIR_DEFAULT_BACKGROUND='orangered1'
+POWERLEVEL9K_DIR_HOME_FOREGROUND='227'
+POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND='227'
+POWERLEVEL9K_DIR_ETC_FOREGROUND='227'
+POWERLEVEL9K_DIR_DEFAULT_FOREGROUND='227'
+#POWERLEVEL9K_CONTEXT_DEFAULT_BACKGROUND='112'
+#POWERLEVEL9K_CONTEXT_DEFAULT_FOREGROUND='gold1'
+
 
 
 ## zgen
@@ -71,6 +86,7 @@ if ! zgen saved; then
     zgen oh-my-zsh plugins/git
     zgen oh-my-zsh plugins/sudo
     zgen oh-my-zsh plugins/command-not-found
+    zgen oh-my-zsh plugins/ssh-agent
     zgen load zsh-users/zsh-syntax-highlighting
     zgen load zsh-users/zsh-autosuggestions
 
@@ -82,9 +98,16 @@ EOPLUGINS
 
     # completions
     zgen load zsh-users/zsh-completions src
+    zgen load littleq0903/gcloud-zsh-completion src
 
     # theme
     # zgen oh-my-zsh themes/arrow
     # save all to init script
     zgen save
 fi
+
+
+autoload -Uz compinit
+compinit
+
+
